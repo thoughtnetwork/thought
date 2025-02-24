@@ -17,7 +17,7 @@ static const int PROTOCOL_VERSION = 70213;
 */
 
 //changing for cuckoo thoughtbtc
-static const int PROTOCOL_VERSION = 70018;
+static const int PROTOCOL_VERSION = 70184;
 
 //! initial proto version, to be increased after version/verack negotiation
 static const int INIT_PROTO_VERSION = 209;
@@ -28,7 +28,7 @@ static const int GETHEADERS_VERSION = 31800;
 
 //! disconnect from peers older than this proto version
 /* dash static const int MIN_PEER_PROTO_VERSION = 70210; */
-static const int MIN_PEER_PROTO_VERSION = 70017;
+static const int MIN_PEER_PROTO_VERSION = 70018;
 
 //! disconnect from peers older than this proto version when DIP3 is activated via the BIP9 deployment
 static const int MIN_PEER_PROTO_VERSION_DIP3 = 70018;
