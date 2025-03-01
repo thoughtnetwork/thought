@@ -23,6 +23,9 @@
 
 #include "evo/specialtx.h"
 #include "evo/providertx.h"
+#include "evo/nuancetx.h"
+#include "evo/concepttx.h"
+#include "evo/mcptx.h"
 
 CTxMemPoolEntry::CTxMemPoolEntry(const CTransactionRef& _tx, const CAmount& _nFee,
                                  int64_t _nTime, double _entryPriority, unsigned int _entryHeight,

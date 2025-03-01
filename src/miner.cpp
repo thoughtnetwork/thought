@@ -30,6 +30,9 @@
 
 #include "evo/specialtx.h"
 #include "evo/cbtx.h"
+#include "evo/concepttx.h"
+#include "evo/nuancetx.h"
+#include "evo/mcptx.h"
 #include "evo/simplifiedmns.h"
 #include "evo/deterministicmns.h"
 

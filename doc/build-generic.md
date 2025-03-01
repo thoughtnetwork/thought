@@ -27,6 +27,13 @@ $ cd ..
 This will download and build all dependencies required to build Thought Core. Caching of build results will ensure that only
 the packages are rebuilt which have changed since the last depends build.
 
+If make fails, the PATH may be incorrectly interfering with the cache. This can happen when using WSL to build. Remove any directories containing the /mnt/* directory and reexport the path
+
+```bash
+$ echo $PATH # To see the path
+$ export PATH=<your path without the windows directories>
+```
+
 It is required to re-run the above commands from time to time when dependencies have been updated or added. If this is
 not done, build failures might occur when building Thought.
 

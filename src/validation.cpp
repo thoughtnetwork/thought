@@ -45,6 +45,9 @@
 
 #include "evo/specialtx.h"
 #include "evo/providertx.h"
+#include "evo/concepttx.h"
+#include "evo/nuancetx.h"
+#include "evo/mcptx.h"
 #include "evo/deterministicmns.h"
 #include "evo/cbtx.h"
 
@@ -589,7 +592,25 @@ bool ContextualCheckTransaction(const CTransaction& tx, CValidationState &state,
                 tx.nType != TRANSACTION_PROVIDER_UPDATE_REGISTRAR &&
                 tx.nType != TRANSACTION_PROVIDER_UPDATE_REVOKE &&
                 tx.nType != TRANSACTION_COINBASE &&
-                tx.nType != TRANSACTION_QUORUM_COMMITMENT) {
+                tx.nType != TRANSACTION_QUORUM_COMMITMENT &&
+                tx.nType != TRANSACTION_CONCEPT_REGISTER &&
+                tx.nType != TRANSACTION_CONCEPT_UNREGISTER &&
+                tx.nType != TRANSACTION_CONCEPT_AUTHORIZE &&
+                tx.nType != TRANSACTION_CONCEPT_REVOKE &&
+                tx.nType != TRANSACTION_CONCEPT_UPDATE &&
+                tx.nType != TRANSACTION_CONCEPT_TRANSFER &&
+                tx.nType != TRANSACTION_MCP_REGISTER &&
+                tx.nType != TRANSACTION_MCP_UNREGISTER &&
+                tx.nType != TRANSACTION_MCP_AUTHORIZE &&
+                tx.nType != TRANSACTION_MCP_REVOKE &&
+                tx.nType != TRANSACTION_MCP_CHECK &&
+                tx.nType != TRANSACTION_MCP_TRANSFER &&
+                tx.nType != TRANSACTION_NUANCE_REGISTER &&
+                tx.nType != TRANSACTION_NUANCE_UNREGISTER &&
+                tx.nType != TRANSACTION_NUANCE_AUTHORIZE &&
+                tx.nType != TRANSACTION_NUANCE_REVOKE &&
+                tx.nType != TRANSACTION_NUANCE_CHECKPOINT &&
+                tx.nType != TRANSACTION_NUANCE_TRANSFER) {
                 return state.DoS(100, false, REJECT_INVALID, "bad-txns-type");
             }
             if (tx.IsCoinBase() && tx.nType != TRANSACTION_COINBASE)

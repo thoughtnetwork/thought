@@ -114,6 +114,9 @@ THOUGHT_CORE_H = \
   evo/evodb.h \
   evo/specialtx.h \
   evo/providertx.h \
+  evo/concetptx.h \
+  evo/nuancetx.h \
+  evo/mcptx.h \
   evo/deterministicmns.h \
   evo/cbtx.h \
   evo/simplifiedmns.h \
@@ -237,6 +240,9 @@ libthought_server_a_SOURCES = \
   evo/evodb.cpp \
   evo/specialtx.cpp \
   evo/providertx.cpp \
+  evo/concepttx.cpp \
+  evo/nuancetx.cpp \
+  evo/mcptx.cpp \
   evo/deterministicmns.cpp \
   evo/cbtx.cpp \
   evo/simplifiedmns.cpp \

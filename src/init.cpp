@@ -1401,6 +1401,14 @@ bool AppInitSanityChecks()
 
 bool AppInitMain(boost::thread_group& threadGroup, CScheduler& scheduler)
 {
+    //********
+    // Temporarily disable anything but testnet
+    // *******
+    if (!IsArgSet("-testnet"))
+    {
+        return InitError("This release valid on testnet only.");
+    }
+
     const CChainParams& chainparams = Params();
     // ********************************************************* Step 4a: application initialization
     // After daemonization get the data directory lock again and hold on to it until exit

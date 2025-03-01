@@ -13,9 +13,13 @@
 #include "cbtx.h"
 #include "deterministicmns.h"
 #include "specialtx.h"
+#include "concepttx.h"
+#include "nuancetx.h"
+#include "mcptx.h"
 
-#include "llmq/quorums_commitment.h"
 #include "llmq/quorums_blockprocessor.h"
+#include "llmq/quorums_commitment.h"
+
 
 bool CheckSpecialTx(const CTransaction& tx, const CBlockIndex* pindexPrev, CValidationState& state)
 {
@@ -35,10 +39,47 @@ bool CheckSpecialTx(const CTransaction& tx, const CBlockIndex* pindexPrev, CVali
         return CheckProUpRegTx(tx, pindexPrev, state);
     case TRANSACTION_PROVIDER_UPDATE_REVOKE:
         return CheckProUpRevTx(tx, pindexPrev, state);
-    case TRANSACTION_COINBASE:
-        return CheckCbTx(tx, pindexPrev, state);
     case TRANSACTION_QUORUM_COMMITMENT:
         return llmq::CheckLLMQCommitment(tx, pindexPrev, state);
+    case TRANSACTION_COINBASE:
+        return CheckCbTx(tx, pindexPrev, state);
+    case TRANSACTION_CONCEPT_REGISTER:
+        return CheckConRegTx(tx, pindexPrev, state);
+    case TRANSACTION_CONCEPT_UNREGISTER:
+        return CheckConUnregTx(tx, pindexPrev, state);
+    case TRANSACTION_CONCEPT_AUTHORIZE:
+        return CheckConAuthTx(tx, pindexPrev, state);
+    case TRANSACTION_CONCEPT_REVOKE:
+        return CheckConRevAuthTx(tx, pindexPrev, state);
+    case TRANSACTION_CONCEPT_UPDATE:
+        return CheckConUpTx(tx, pindexPrev, state);
+    case TRANSACTION_CONCEPT_TRANSFER:
+        return CheckConXferTx(tx, pindexPrev, state);
+    case TRANSACTION_NUANCE_REGISTER:
+        return CheckNuRegTx(tx, pindexPrev, state);
+    case TRANSACTION_NUANCE_UNREGISTER:
+        return CheckNuUnregTx(tx, pindexPrev, state);
+    case TRANSACTION_NUANCE_AUTHORIZE:
+        return CheckNuAuthTx(tx, pindexPrev, state);
+    case TRANSACTION_NUANCE_REVOKE:
+        return CheckNuRevAuthTx(tx, pindexPrev, state);
+    case TRANSACTION_NUANCE_CHECKPOINT:
+        return CheckNuCheckTx(tx, pindexPrev, state);
+    case TRANSACTION_NUANCE_TRANSFER:
+        return CheckNuXferTx(tx, pindexPrev, state);
+    case TRANSACTION_MCP_REGISTER:
+        return CheckMcpRegTx(tx, pindexPrev, state);
+    case TRANSACTION_MCP_UNREGISTER:
+        return CheckMcpUnregTx(tx, pindexPrev, state);
+    case TRANSACTION_MCP_AUTHORIZE:
+        return CheckMcpAuthTx(tx, pindexPrev, state);
+    case TRANSACTION_MCP_REVOKE:
+        return CheckMcpRevAuthTx(tx, pindexPrev, state);
+    case TRANSACTION_MCP_CHECK:
+        return CheckMcpCheckTx(tx, pindexPrev, state);
+    case TRANSACTION_MCP_TRANSFER:
+        return CheckMcpXferTx(tx, pindexPrev, state);
+
     }
 
     return state.DoS(10, false, REJECT_INVALID, "bad-tx-type-check");
@@ -60,6 +101,27 @@ bool ProcessSpecialTx(const CTransaction& tx, const CBlockIndex* pindex, CValida
         return true; // nothing to do
     case TRANSACTION_QUORUM_COMMITMENT:
         return true; // handled per block
+    case TRANSACTION_CONCEPT_REGISTER:
+    case TRANSACTION_CONCEPT_UNREGISTER:
+    case TRANSACTION_CONCEPT_AUTHORIZE:
+    case TRANSACTION_CONCEPT_REVOKE:
+    case TRANSACTION_CONCEPT_UPDATE:
+    case TRANSACTION_CONCEPT_TRANSFER:
+        return true; // concepts active
+    case TRANSACTION_NUANCE_REGISTER:
+    case TRANSACTION_NUANCE_UNREGISTER:
+    case TRANSACTION_NUANCE_AUTHORIZE:
+    case TRANSACTION_NUANCE_REVOKE:
+    case TRANSACTION_NUANCE_CHECKPOINT:
+    case TRANSACTION_NUANCE_TRANSFER:
+        return true; // nuances active
+    case TRANSACTION_MCP_REGISTER:
+    case TRANSACTION_MCP_UNREGISTER:
+    case TRANSACTION_MCP_AUTHORIZE:
+    case TRANSACTION_MCP_REVOKE:
+    case TRANSACTION_MCP_CHECK:
+    case TRANSACTION_MCP_TRANSFER:
+        return true; // concepts active
     }
 
     return state.DoS(100, false, REJECT_INVALID, "bad-tx-type-proc");
@@ -81,6 +143,27 @@ bool UndoSpecialTx(const CTransaction& tx, const CBlockIndex* pindex)
         return true; // nothing to do
     case TRANSACTION_QUORUM_COMMITMENT:
         return true; // handled per block
+    case TRANSACTION_CONCEPT_REGISTER:
+    case TRANSACTION_CONCEPT_UNREGISTER:
+    case TRANSACTION_CONCEPT_AUTHORIZE:
+    case TRANSACTION_CONCEPT_REVOKE:
+    case TRANSACTION_CONCEPT_UPDATE:
+    case TRANSACTION_CONCEPT_TRANSFER:
+        return true; // concepts active
+    case TRANSACTION_NUANCE_REGISTER:
+    case TRANSACTION_NUANCE_UNREGISTER:
+    case TRANSACTION_NUANCE_AUTHORIZE:
+    case TRANSACTION_NUANCE_REVOKE:
+    case TRANSACTION_NUANCE_CHECKPOINT:
+    case TRANSACTION_NUANCE_TRANSFER:
+        return true; // nuances active
+    case TRANSACTION_MCP_REGISTER:
+    case TRANSACTION_MCP_UNREGISTER:
+    case TRANSACTION_MCP_AUTHORIZE:
+    case TRANSACTION_MCP_REVOKE:
+    case TRANSACTION_MCP_CHECK:
+    case TRANSACTION_MCP_TRANSFER:
+        return true; // mcp active
     }
 
     return false;
