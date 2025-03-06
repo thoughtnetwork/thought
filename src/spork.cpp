@@ -18,18 +18,18 @@ CSporkManager sporkManager;
 const std::string CSporkManager::SERIALIZATION_VERSION_STRING = "CSporkManager-Version-2";
 
 std::map<int, int64_t> mapSporkDefaults = {
-    {SPORK_2_INSTANTSEND_ENABLED,            0},             // ON
-    {SPORK_3_INSTANTSEND_BLOCK_FILTERING,    0},             // ON
+    {SPORK_2_INSTANTSEND_ENABLED,            0},               // ON
+    {SPORK_3_INSTANTSEND_BLOCK_FILTERING,    0},               // ON
     {SPORK_5_INSTANTSEND_MAX_VALUE,          100000},          // 1000 Thought
-    {SPORK_6_NEW_SIGS,                       4070908800ULL}, // OFF
-    {SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT, 4070908800ULL}, // OFF
-    {SPORK_9_SUPERBLOCKS_ENABLED,            4070908800ULL}, // OFF
-    {SPORK_10_MASTERNODE_PAY_UPDATED_NODES,  4070908800ULL}, // OFF
-    {SPORK_12_RECONSIDER_BLOCKS,             0},             // 0 BLOCKS
-    {SPORK_14_REQUIRE_SENTINEL_FLAG,         4070908800ULL}, // OFF
-    {SPORK_15_DETERMINISTIC_MNS_ENABLED,     4070908800ULL}, // OFF
-    {SPORK_16_INSTANTSEND_AUTOLOCKS,         4070908800ULL}, // OFF
-    {SPORK_17_QUORUM_DKG_ENABLED,            4070908800ULL}, // OFF
+    {SPORK_6_NEW_SIGS,                       4070908800ULL},   // OFF
+    {SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT, 0},               // ON
+    {SPORK_9_SUPERBLOCKS_ENABLED,            4070908800ULL},   // OFF
+    {SPORK_10_MASTERNODE_PAY_UPDATED_NODES,  0},               // ON
+    {SPORK_12_RECONSIDER_BLOCKS,             0},               // 0 BLOCKS
+    {SPORK_14_REQUIRE_SENTINEL_FLAG,         4070908800ULL},   // OFF
+    {SPORK_15_DETERMINISTIC_MNS_ENABLED,     0},               // ON
+    {SPORK_16_INSTANTSEND_AUTOLOCKS,         4070908800ULL},   // OFF
+    {SPORK_17_QUORUM_DKG_ENABLED,            4070908800ULL},   // OFF
 };
 
 bool CSporkManager::SporkValueIsActive(int nSporkID, int64_t &nActiveValueRet) const
