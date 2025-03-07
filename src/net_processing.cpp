@@ -1477,23 +1477,7 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
             return false;
         }
 
-        // Hack for 0.18.4 because 0.18.3 should connect, but 0.18.2 and 0.18.1 should not.
-        // Won't need this going forward because we've increased the granularity of the PROTOCOL_VERSION
-        if (nVersion == nMinPeerProtoVersion)
-        {
-            LogPrintf("Checking for deprecated 0.18.x versions\n");
-            if (pfrom->cleanSubVer.find("0.18.2") != std::string::npos || 
-                pfrom->cleanSubVer.find("0.18.1") != std::string::npos ||
-                pfrom->cleanSubVer.find("0.18.0") != std::string::npos)
-            {
-                // disconnect
-                LogPrintf("peer=%d using deprecated version %s; disconnecting\n", pfrom->id, pfrom->cleanSubVer);
-                connman.PushMessage(pfrom, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::REJECT, strCommand, REJECT_OBSOLETE,
-                     strprintf("Version must be 0.18.3 or greater")));
-                pfrom->fDisconnect = true;
-                return false;
-            }
-        }
+        
 
         if (nVersion == 10300)
             nVersion = 300;
@@ -1502,6 +1486,24 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
         if (!vRecv.empty()) {
             vRecv >> LIMITED_STRING(strSubVer, MAX_SUBVERSION_LENGTH);
             cleanSubVer = SanitizeString(strSubVer);
+
+            // Hack for 0.18.4 because 0.18.3 should connect, but 0.18.2 and 0.18.1 should not.
+            // Won't need this going forward because we've increased the granularity of the PROTOCOL_VERSION
+            if (nVersion == nMinPeerProtoVersion)
+            {
+                LogPrintf("Checking for deprecated 0.18.x versions\n");
+                if (cleanSubVer.find("0.18.2") != std::string::npos || 
+                    cleanSubVer.find("0.18.1") != std::string::npos ||
+                    cleanSubVer.find("0.18.0") != std::string::npos)
+                {
+                    // disconnect
+                    LogPrintf("peer=%d using deprecated version %s; disconnecting\n", pfrom->id, cleanSubVer);
+                    connman.PushMessage(pfrom, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::REJECT, strCommand, REJECT_OBSOLETE,
+                                        strprintf("Version must be 0.18.3 or greater")));
+                    pfrom->fDisconnect = true;
+                    return false;
+                }
+            }
         }
         if (!vRecv.empty()) {
             vRecv >> nStartingHeight;
