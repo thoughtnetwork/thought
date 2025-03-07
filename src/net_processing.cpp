@@ -1369,9 +1369,11 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
 
     // BEGIN TEMPORARY CODE
     bool fDIP0003Active;
+    int nHeight = 0;
     {
         LOCK(cs_main);
         fDIP0003Active = VersionBitsState(chainActive.Tip(), chainparams.GetConsensus(), Consensus::DEPLOYMENT_DIP0003, versionbitscache) == THRESHOLD_ACTIVE;
+        nHeight = chainActive.Tip()->nHeight;
     }
     // TODO delete this in next release after v13
     int nMinPeerProtoVersion = MIN_PEER_PROTO_VERSION;
@@ -1483,31 +1485,52 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
             nVersion = 300;
         if (!vRecv.empty())
             vRecv >> addrFrom >> nNonce;
+                  
         if (!vRecv.empty()) {
             vRecv >> LIMITED_STRING(strSubVer, MAX_SUBVERSION_LENGTH);
             cleanSubVer = SanitizeString(strSubVer);
-
-            // Hack for 0.18.4 because 0.18.3 should connect, but 0.18.2 and 0.18.1 should not.
-            // Won't need this going forward because we've increased the granularity of the PROTOCOL_VERSION
-            if (nVersion == nMinPeerProtoVersion)
-            {
-                LogPrintf("Checking for deprecated 0.18.x versions\n");
-                if (cleanSubVer.find("0.18.2") != std::string::npos || 
-                    cleanSubVer.find("0.18.1") != std::string::npos ||
-                    cleanSubVer.find("0.18.0") != std::string::npos)
-                {
-                    // disconnect
-                    LogPrintf("peer=%d using deprecated version %s; disconnecting\n", pfrom->id, cleanSubVer);
-                    connman.PushMessage(pfrom, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::REJECT, strCommand, REJECT_OBSOLETE,
-                                        strprintf("Version must be 0.18.3 or greater")));
-                    pfrom->fDisconnect = true;
-                    return false;
-                }
-            }
         }
+
         if (!vRecv.empty()) {
             vRecv >> nStartingHeight;
+        }   
+
+        // Hack for 0.18.4 because 0.18.3 should connect until old superblock height, but 0.18.2 and 0.18.1 should not.
+        // Won't need this going forward because we've increased the granularity of the PROTOCOL_VERSION
+        if (nVersion == nMinPeerProtoVersion)
+        {
+            LogPrintf("ProcessMessage: Checking for deprecated 0.18.x versions\n");
+            if (cleanSubVer.find("0.18.2") != std::string::npos || 
+                cleanSubVer.find("0.18.1") != std::string::npos ||
+                cleanSubVer.find("0.18.0") != std::string::npos)
+            {
+                    // disconnect
+                LogPrintf("ProcessMessage: peer=%d using deprecated version %s; disconnecting\n", pfrom->id, cleanSubVer);
+                connman.PushMessage(pfrom, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::REJECT, strCommand, REJECT_OBSOLETE,
+                                    strprintf("Version must be 0.18.3 or greater")));
+                pfrom->fDisconnect = true;
+                return false;
+            }
+            else if (cleanSubVer.find("0.18.3") != std::string::npos &&
+                     nHeight > 2290358 &&
+                     nStartingHeight < 2290358)
+            {
+                // This is a stuck v0.18.3, so we're past the old superblock height
+                // and don't want v0.18.3 any more.
+                // disconnect
+                LogPrintf("ProcessMessage: peer=%d using deprecated version %s; disconnecting\n", pfrom->id, cleanSubVer);
+                connman.PushMessage(pfrom, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::REJECT, strCommand, REJECT_OBSOLETE,
+                                    strprintf("Version must be 0.18.4 or greater")));
+                pfrom->fDisconnect = true;
+                return false;
+            }
+            else
+            {
+                LogPrintf("ProcessMessage: Version %s verified.\n", cleanSubVer);
+            }
         }
+
+
         if (!vRecv.empty())
             vRecv >> fRelay;
         // Disconnect if we connected to ourself
