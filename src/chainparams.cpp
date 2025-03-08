@@ -250,10 +250,10 @@ public:
         consensus.CuckooRequiredBlockHeight = 248800;
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000009f11cd8f3c0a6"); // 1314126
+        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000000009f1533d74bdea"); // 2272402
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x00000f6c1b2cf55842736830bb3586f6171959f2d79f300e1a2cbd7ef943f869"); // 1314126
+        consensus.defaultAssumeValid = uint256S("0x00002e27c376e325d39c00fe46b3c94718c81db5d1d24421f77f7e00dbbf7159"); // 2272402
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -334,6 +334,7 @@ public:
             ( 1138462, uint256S("00008a3a2328e2b7143ef1862312e69ccab7907ab26365b673f23c186d3c60cc"))
             ( 1314126, uint256S("00000f6c1b2cf55842736830bb3586f6171959f2d79f300e1a2cbd7ef943f869"))
             ( 1647955, uint256S("0000279c4f19d8922d7e99d51be6e4d7586000817d81bee4231713fce9f23db3"))
+            ( 2272402, uint256S("00002e27c376e325d39c00fe46b3c94718c81db5d1d24421f77f7e00dbbf7159"))
         };
 
         chainTxData = ChainTxData{
