@@ -64,7 +64,7 @@ public:
     };
      
     enum {
-        DELETE = 0,
+        REMOVE = 0,
         RETURN_TO_ORIGIN = 1,
         ARCHIVE = 2
     };
@@ -75,7 +75,7 @@ public:
     std::vector<unsigned char> mcpId;
     uint16_t version;
     uint16_t action{KILL};
-    uint16_t postAction{DELETE};
+    uint16_t postAction{REMOVE};
 
 public:
     ADD_SERIALIZE_METHODS;

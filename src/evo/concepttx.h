@@ -70,7 +70,7 @@ public:
     static const uint16_t CURRENT_VERSION = 1;
 
     enum {
-        DELETE = 0,
+        REMOVE = 0,
         HIDE = 1
     };
 
@@ -78,7 +78,7 @@ public:
     // Concept un-register Fields
     std::vector<unsigned char> conceptId;
     std::vector<unsigned char> conceptVersion;
-    uint16_t action{DELETE};
+    uint16_t action{REMOVE};
 
 public:
     ADD_SERIALIZE_METHODS;
