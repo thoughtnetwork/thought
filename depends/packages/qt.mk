@@ -1,5 +1,5 @@
 package=qt
-$(package)_version=5.15.13
+$(package)_version=5.15.16
 $(package)_download_path=https://download.qt.io/official_releases/qt/5.15/$($(package)_version)/submodules
 $(package)_suffix=everywhere-opensource-src-$($(package)_version).tar.xz
 $(package)_file_name=qtbase-$($(package)_suffix)
