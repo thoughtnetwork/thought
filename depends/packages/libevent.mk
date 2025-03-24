@@ -27,6 +27,5 @@ define $(package)_stage_cmds
 endef
 
 define $(package)_postprocess_cmds
-endef
   rm include/event2/*_compat.h
 endef
