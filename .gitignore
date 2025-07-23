@@ -120,6 +120,8 @@ thought-*.tar.xz
 .project
 .settings/
 .cproject
+.vscode
 
 # tarball creation directory
 thoughtcore-build/
+
