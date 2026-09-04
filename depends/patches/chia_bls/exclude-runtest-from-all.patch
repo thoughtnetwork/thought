@@ -1,0 +1,11 @@
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -63,7 +63,7 @@
+ install(FILES ${includes} DESTINATION include/chiabls)
+ install(FILES ${C_LIB} DESTINATION lib)
+ 
+-add_executable(runtest test.cpp)
++add_executable(runtest EXCLUDE_FROM_ALL test.cpp)
+ add_executable(runbench test-bench.cpp)
+ 
+ if (SODIUM_FOUND)

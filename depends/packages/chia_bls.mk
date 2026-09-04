@@ -6,7 +6,7 @@ $(package)_file_name=$($(package)_version).tar.gz
 $(package)_sha256_hash=b3ec74a77a7b6795f84b05e051a0824ef8d9e05b04b2993f01040f35689aa87c
 $(package)_dependencies=gmp
 #$(package)_patches=...TODO (when we switch back to https://github.com/Chia-Network/bls-signatures)
-$(package)_patches=rename-bn_init-to-bn_make.patch
+$(package)_patches=rename-bn_init-to-bn_make.patch blake2-align-state-structs.patch relic-cmake-cflags-preservation-r3.patch exclude-runtest-from-all.patch
 
 define $(package)_preprocess_cmds
   for i in $($(package)_patches); do patch -N -p1 < $($(package)_patch_dir)/$$$$i; done
@@ -14,7 +14,7 @@ endef
 
 define $(package)_set_vars
   $(package)_config_opts=-DCMAKE_INSTALL_PREFIX=$($(package)_staging_dir)/$(host_prefix)
-  $(package)_config_opts+= -DCMAKE_PREFIX_PATH=$($(package)_staging_dir)/$(host_prefix)
+  $(package)_config_opts+= -DCMAKE_PREFIX_PATH=$(host_prefix)
   $(package)_config_opts+= -DSTLIB=ON -DSHLIB=OFF -DSTBIN=ON -DTEST=OFF -DBENCH=OFF
   $(package)_config_opts_linux=-DOPSYS=LINUX -DCMAKE_SYSTEM_NAME=Linux
   $(package)_config_opts_darwin=-DOPSYS=MACOSX -DCMAKE_SYSTEM_NAME=Darwin

@@ -1,0 +1,16 @@
+--- a/src/mutex/mut_region.c
++++ b/src/mutex/mut_region.c
+@@ -256,7 +256,12 @@ __mutex_region_init(env, mtxmgr)
+ 	    __mutex_alloc(env,
+ 		MTX_MUTEX_TEST, DB_MUTEX_SHARED, &mutex) != 0) ||
+ 	    (ret = __mutex_lock(env, mutex)) != 0 ||
+-	    (ret = __mutex_tryrdlock(env, mutex)) != DB_LOCK_NOTGRANTED ||
++#if defined(HAVE_MUTEX_PTHREADS) && defined(__APPLE__)
++	    ((ret = __mutex_tryrdlock(env, mutex)) != DB_LOCK_NOTGRANTED &&
++	    ret != EDEADLK) ||
++#else
++	    (ret = __mutex_tryrdlock(env, mutex)) != DB_LOCK_NOTGRANTED ||
++#endif
+ 	    (ret = __mutex_unlock(env, mutex)) != 0 ||
+ 	    (ret = __mutex_rdlock(env, mutex)) != 0 ||
+ 	    (ret = __mutex_rdlock(env, mutex)) != 0 ||
