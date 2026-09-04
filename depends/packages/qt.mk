@@ -128,6 +128,7 @@ $(package)_config_opts_darwin += -no-freetype
 $(package)_config_opts_darwin += QMAKE_MACOSX_DEPLOYMENT_TARGET=$(OSX_MIN_VERSION)
 
 # Optimizing using > -O1 causes non-determinism when building across arches.
+$(package)_config_opts_aarch64_darwin += QMAKE_MACOSX_DEPLOYMENT_TARGET=11.0
 $(package)_config_opts_aarch64_darwin += "QMAKE_CFLAGS_OPTIMIZE_FULL = -O1"
 
 ifneq ($(build_os),darwin)
